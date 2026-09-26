@@ -19,11 +19,16 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Locate sdkmanager
+        run: |
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          find $ANDROID_HOME -iname "sdkmanager" 2>/dev/null
+
       - name: Accept Android SDK licenses
-        run: yes | sdkmanager --licenses > /dev/null || true
+        run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null || true
 
       - name: Install required SDK platform and build tools
-        run: sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0"
+        run: $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0"
 
       - name: Generate Gradle wrapper (if missing)
         run: |
